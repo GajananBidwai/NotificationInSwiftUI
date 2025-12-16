@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct NotificationInSwiftUIApp: App {
+    let appData = ApplicationData.shared
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(appData)
         }
     }
 }
