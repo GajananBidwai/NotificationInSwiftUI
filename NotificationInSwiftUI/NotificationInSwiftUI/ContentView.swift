@@ -28,8 +28,10 @@ struct ContentView: View {
                         let message = inputMassage.trimmingCharacters(in: .whitespaces)
                         if !message.isEmpty {
                             inputMassage = ""
+                            await appData.groupPostNotification(messeage: message)
 //                            await appData.postNotification(messeage: message)
-                            await appData.actionPostNotification(messeage: message)
+//                            await appData.actionPostNotification(messeage: message)
+                            
                         }
                     }
                 }.disabled(isButtonDisabeld)

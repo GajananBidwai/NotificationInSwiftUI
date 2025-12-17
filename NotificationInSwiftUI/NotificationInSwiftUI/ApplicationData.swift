@@ -30,7 +30,7 @@ import UIKit
         }
     }
     
-    func GroupPostNotification(messeage: String) async {
+    func groupPostNotification(messeage: String) async {
         let listGroup = ["One group", "Second Group"]
         
         let authorization = await center.notificationSettings()
