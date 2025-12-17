@@ -17,7 +17,7 @@ import UIKit
     static let shared: ApplicationData = ApplicationData()
     
     private init () {
-//        center.delegate = centerDelegate
+        center.delegate = centerDelegate
     }
     
     func askAuthorization() async -> Bool {
@@ -27,6 +27,42 @@ import UIKit
         } catch {
             print("Error \(error)")
             return false
+        }
+    }
+    
+    func GroupPostNotification(messeage: String) async {
+        let listGroup = ["One group", "Second Group"]
+        
+        let authorization = await center.notificationSettings()
+        if authorization.authorizationStatus == .authorized {
+            for group in listGroup {
+                for index in 1...3 {
+                    let content = UNMutableNotificationContent()
+//                    content.title = "Reminder"
+//                    content.body = messeage
+                    content.title = "Reminder\(group)"
+                    content.body = "\(index) - \(messeage)"
+                    content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "sample-3s.mp3"))
+                    let idImage = "attach\(UUID())"
+                    if let urlImage = await getThumbNail(id: idImage) {
+                        if let attachment = try? UNNotificationAttachment(identifier: idImage, url: urlImage, options: nil) {
+                            content.attachments = [attachment]
+                        }
+                    }
+                    
+                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+                    let id = "reminder-\(UUID())"
+                    let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+                    
+                    do {
+                        try await center.add(request)
+                    } catch {
+                        print("Error \(error)")
+                    }
+                }
+            }
+            
+            
         }
     }
     
@@ -53,9 +89,42 @@ import UIKit
             } catch {
                 print("Error \(error)")
             }
-            
         }
     }
+    
+    func actionPostNotification(messeage: String) async {
+        let authorization = await center.notificationSettings()
+        if authorization.authorizationStatus == .authorized {
+            
+            let groupId = "listAction"
+            let actionDelete = UNNotificationAction(identifier: "deleteButton", title: "Delete", options: .destructive)
+            let category = UNNotificationCategory(identifier: groupId, actions: [actionDelete], intentIdentifiers: [], options: [])
+            center.setNotificationCategories([category])
+            
+            let content = UNMutableNotificationContent()
+            content.title = "Reminder"
+            content.body = messeage
+            content.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "sample-3s.mp3"))
+            content.categoryIdentifier = groupId
+            let idImage = "attach\(UUID())"
+            if let urlImage = await getThumbNail(id: idImage) {
+                if let attachment = try? UNNotificationAttachment(identifier: idImage, url: urlImage, options: nil) {
+                    content.attachments = [attachment]
+                }
+            }
+            
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+            let id = "reminder-\(UUID())"
+            let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+            
+            do {
+                try await center.add(request)
+            } catch {
+                print("Error \(error)")
+            }
+        }
+    }
+    
     
     func getThumbNail(id: String) async ->  URL?{
         let manager = FileManager.default
