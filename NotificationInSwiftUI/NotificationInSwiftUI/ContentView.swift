@@ -11,6 +11,7 @@ struct ContentView: View {
     @Environment(ApplicationData.self) private var appData
     @State private var inputMassage: String = ""
     @State private var isButtonDisabeld: Bool = false
+    @Environment(\.scenePhase) private var scenePhase
     
     var body: some View {
         @Bindable var appData = appData
@@ -43,15 +44,30 @@ struct ContentView: View {
 //                isButtonDisabeld = !authorization
 //            }
 //        Key-Value Observer
+//        VStack {
+//            Text(appData.showValue)
+//            Button("Add Value") {
+//                appData.myObject.testValue += 100
+//            }
+//        }.padding()
+//            .onDisappear {
+//                appData.myObservation = nil
+//            }
+            
+//        App State
         VStack {
-            Text(appData.showValue)
-            Button("Add Value") {
-                appData.myObject.testValue += 100
+            Image(systemName: "globe")
+                .resizable()
+                .frame(width: 50, height: 50)
+        }.onChange(of: scenePhase, initial: false) { oldValue, phase in
+            if phase == .active {
+                print("App is active")
+            } else if phase == .background {
+                print("App is background")
+            } else if phase == .inactive {
+                print("App is inactive")
             }
-        }.padding()
-            .onDisappear {
-                appData.myObservation = nil
-            }
+        }
     }
 }
 
