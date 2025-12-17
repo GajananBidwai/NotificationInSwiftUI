@@ -12,9 +12,13 @@ import UIKit
 
 @Observable class ApplicationData: @unchecked Sendable {
     @ObservationIgnored let center = UNUserNotificationCenter.current()
+    @ObservationIgnored let centerDelegate: CenterDelegate = CenterDelegate()
     
     static let shared: ApplicationData = ApplicationData()
-    private init () { }
+    
+    private init () {
+//        center.delegate = centerDelegate
+    }
     
     func askAuthorization() async -> Bool {
         do {
