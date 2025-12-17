@@ -98,7 +98,8 @@ import UIKit
             
             let groupId = "listAction"
             let actionDelete = UNNotificationAction(identifier: "deleteButton", title: "Delete", options: .destructive)
-            let category = UNNotificationCategory(identifier: groupId, actions: [actionDelete], intentIdentifiers: [], options: [])
+            let actionInput = UNTextInputNotificationAction(identifier: "inputField", title: "message", options: [])
+            let category = UNNotificationCategory(identifier: groupId, actions: [actionDelete, actionInput], intentIdentifiers: [], options: [])
             center.setNotificationCategories([category])
             
             let content = UNMutableNotificationContent()

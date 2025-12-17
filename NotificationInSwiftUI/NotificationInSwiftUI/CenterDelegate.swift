@@ -18,6 +18,8 @@ class CenterDelegate: NSObject, UNUserNotificationCenterDelegate {
         let identifier = response.actionIdentifier
         if identifier == "deleteButton" {
             print("Delete Button Pressed")
+        } else if identifier == "inputField" {
+            print("Response \((response as! UNTextInputNotificationResponse).userText)")
         }
     }
 }
