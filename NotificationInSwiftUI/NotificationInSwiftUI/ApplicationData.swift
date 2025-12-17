@@ -13,11 +13,20 @@ import UIKit
 @Observable class ApplicationData: @unchecked Sendable {
     @ObservationIgnored let center = UNUserNotificationCenter.current()
     @ObservationIgnored let centerDelegate: CenterDelegate = CenterDelegate()
+    @ObservationIgnored var myObject = MyObject()
+    @ObservationIgnored var myObservation: NSKeyValueObservation?
+    var showValue = ""
     
     static let shared: ApplicationData = ApplicationData()
     
     private init () {
-        center.delegate = centerDelegate
+//        center.delegate = centerDelegate
+//        Key-Value Observer
+        myObservation = myObject.observe(\.testValue, options: [.new], changeHandler: { obj, value in
+            if let newValue = value.newValue {
+                self.showValue = "NewValue: \(newValue)"
+            }
+        })
     }
     
     func askAuthorization() async -> Bool {

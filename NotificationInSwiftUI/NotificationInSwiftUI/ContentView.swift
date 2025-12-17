@@ -15,32 +15,42 @@ struct ContentView: View {
     var body: some View {
         @Bindable var appData = appData
         
-        VStack(spacing: 12){
-            HStack {
-                Text("Message")
-                TextField("Inser Message", text: $inputMassage)
-                    .textFieldStyle(.roundedBorder)
+//        VStack(spacing: 12){
+//            HStack {
+//                Text("Message")
+//                TextField("Inser Message", text: $inputMassage)
+//                    .textFieldStyle(.roundedBorder)
+//            }
+//            HStack {
+//                Spacer()
+//                Button("Post Notification") {
+//                    Task(priority: .background) {
+//                        let message = inputMassage.trimmingCharacters(in: .whitespaces)
+//                        if !message.isEmpty {
+//                            inputMassage = ""
+////                            await appData.groupPostNotification(messeage: message)
+////                            await appData.postNotification(messeage: message)
+//                            await appData.actionPostNotification(messeage: message)
+//                            
+//                        }
+//                    }
+//                }.disabled(isButtonDisabeld)
+//            }
+//            Spacer()
+//        }.padding()
+//            .task(priority: .background) {
+//                let authorization = await appData.askAuthorization()
+//                isButtonDisabeld = !authorization
+//            }
+//        Key-Value Observer
+        VStack {
+            Text(appData.showValue)
+            Button("Add Value") {
+                appData.myObject.testValue += 100
             }
-            HStack {
-                Spacer()
-                Button("Post Notification") {
-                    Task(priority: .background) {
-                        let message = inputMassage.trimmingCharacters(in: .whitespaces)
-                        if !message.isEmpty {
-                            inputMassage = ""
-//                            await appData.groupPostNotification(messeage: message)
-//                            await appData.postNotification(messeage: message)
-                            await appData.actionPostNotification(messeage: message)
-                            
-                        }
-                    }
-                }.disabled(isButtonDisabeld)
-            }
-            Spacer()
         }.padding()
-            .task(priority: .background) {
-                let authorization = await appData.askAuthorization()
-                isButtonDisabeld = !authorization
+            .onDisappear {
+                appData.myObservation = nil
             }
     }
 }
